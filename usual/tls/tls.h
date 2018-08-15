@@ -110,6 +110,7 @@ void tls_config_verify(struct tls_config *_config);
 
 void tls_config_verify_client(struct tls_config *_config);
 void tls_config_verify_client_optional(struct tls_config *_config);
+void tls_config_set_compression(struct tls_config *config, int enable_compression);
 
 void tls_config_clear_keys(struct tls_config *_config);
 int tls_config_parse_protocols(uint32_t *_protocols, const char *_protostr);

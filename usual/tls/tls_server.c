@@ -115,6 +115,10 @@ tls_configure_server(struct tls *ctx)
 		tls_set_errorx(ctx, "failed to set session id context");
 		goto err;
 	}
+	if(ctx->config->compression)
+		SSL_CTX_clear_options(ctx->ssl_ctx, SSL_OP_NO_COMPRESSION);
+	else
+		SSL_CTX_set_options(ctx->ssl_ctx, SSL_OP_NO_COMPRESSION);
 
 	return (0);
 

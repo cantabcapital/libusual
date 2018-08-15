@@ -102,6 +102,7 @@ struct tls_config {
 	int verify_depth;
 	int verify_name;
 	int verify_time;
+	int compression;
 };
 
 struct tls_conninfo {

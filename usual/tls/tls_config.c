@@ -141,6 +141,15 @@ tls_config_new(void)
 	tls_config_set_protocols(config, TLS_PROTOCOLS_DEFAULT);
 	tls_config_set_verify_depth(config, 6);
 
+// "TLS Compression is dangerous and should be avoided on the public internet. It is disabled by
+// default in OpenSSL 1.1.0 and later, but needs to be explicitly disabled for earlier releases."
+// https://jira.mongodb.org/browse/CDRIVER-1369
+#if OPENSSL_VERSION_NUMBER >= 0x10100000L
+	tls_config_set_compression(config, 0); // disable compression by default, to match OpenSSL defaults
+#else
+	tls_config_set_compression(config, 1); // don't disable compression by default, to match OpenSSL defaults
+#endif
+
 	tls_config_prefer_ciphers_server(config);
 
 	tls_config_verify(config);
@@ -473,6 +482,12 @@ void
 tls_config_verify_client_optional(struct tls_config *config)
 {
 	config->verify_client = 2;
+}
+
+void
+tls_config_set_compression(struct tls_config *config, int enable_compression)
+{
+	config->compression = enable_compression;
 }
 
 #endif /* USUAL_LIBSSL_FOR_TLS */
